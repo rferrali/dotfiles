@@ -97,6 +97,7 @@ flatpaks=(
     sh.loft.devpod
     com.github.tchx84.Flatseal
     app.zen_browser.zen
+    net.thunderbird.Thunderbird
 )
 
 flatpak install -y flathub "${flatpaks[@]}"
