@@ -94,7 +94,6 @@ flatpaks=(
     com.mattjakeman.ExtensionManager
     sh.loft.devpod
     com.github.tchx84.Flatseal
-    app.zen_browser.zen
     net.thunderbird.Thunderbird
 )
 
