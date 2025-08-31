@@ -37,7 +37,6 @@ fi
 copr_repos=(
     el-file4138/zotero
     aquacash5/nerd-fonts
-    mguessan/davmail
 )
 
 for repo in "${copr_repos[@]}"; do
@@ -51,7 +50,6 @@ done
 dnf check-update
 
 apps=(
-    davmail
     docker-ce
     docker-ce-cli
     containerd.io
