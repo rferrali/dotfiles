@@ -20,7 +20,10 @@ if ! dnf repolist | grep -q 'terra'; then
     echo "🌍 Enabling repository terra"
     sudo dnf install -y --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release
 fi
-
+if ! dnf repolist | grep -q 'gh-cli'; then
+    echo "🌍 Enabling repository gh-cli"
+    sudo dnf config-manager addrepo --from-repofile=https://cli.github.com/packages/rpm/gh-cli.repo
+fi
 if ! dnf repolist | grep -q 'docker-ce-stable'; then
     echo "🌍 Enabling repository docker-ce-stable"
     sudo dnf config-manager addrepo --from-repofile=https://download.docker.com/linux/fedora/docker-ce.repo
@@ -72,6 +75,7 @@ apps=(
 )
 
 sudo dnf install -y "${apps[@]}"
+sudo dnf install -y gh --repo gh-cli
 
 # --- Flatpaks ---
 
@@ -166,13 +170,6 @@ else
     echo "🛠️ Installing zsh-syntax-highlighting..."
     git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 fi
-
-# --- Git ---
-# echo "🛠️ Configuring Git..."
-git config --global user.name "Romain Ferrali"
-git config --global user.email "rferrali@gmail.com"
-git config --global init.defaultBranch main
-git config --global core.editor "code --wait"
 
 # --- SSH ---
 # echo "🔐 Configuring SSH..."
