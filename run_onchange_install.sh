@@ -72,10 +72,18 @@ apps=(
     gnome-tweaks
     libappindicator-gtk3
     python3-gpg
+    cabextract
+    xorg-x11-font-utils
 )
 
 sudo dnf install -y "${apps[@]}"
 sudo dnf install -y gh --repo gh-cli
+
+# --- Microsoft fonts ---
+if [ ! -d "/usr/share/fonts/msttcore" ]; then
+    echo "🌍 Installing Microsoft fonts"
+    sudo dnf install -y https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
+fi
 
 # --- Flatpaks ---
 
