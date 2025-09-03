@@ -65,6 +65,7 @@ packages:
       - sqlite
       - tldr
       - mas
+      - pass
     casks:
       - appcleaner
       - arc
