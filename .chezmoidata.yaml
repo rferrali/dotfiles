@@ -1,0 +1,106 @@
+zsh:
+  - zsh-autosuggestions
+  - zsh-syntax-highlighting
+packages:
+  linux:
+    copr:
+      - el-file4138/zotero
+      - aquacash5/nerd-fonts
+      - mguessan/davmail
+    dnf_packages:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - code
+      - fastfetch
+      - fortune
+      - starship
+      - tldr
+      - zsh
+      - mozilla-fira-sans-fonts
+      - mozilla-fira-mono-fonts
+      - fira-code-nerd-fonts
+      - victor-mono-nerd-fonts
+      - python3-devel
+      - pipx
+      - zotero
+      - gnome-tweaks
+      - libappindicator-gtk3
+      - python3-gpg
+      - cabextract
+      - xorg-x11-font-utils
+      - davmail
+    flatpaks:
+      - md.obsidian.Obsidian
+      - com.spotify.Client
+      - com.surfshark.Surfshark
+      - org.inkscape.Inkscape
+      - com.mattjakeman.ExtensionManager
+      - sh.loft.devpod
+      - com.github.tchx84.Flatseal
+      - net.thunderbird.Thunderbird
+    web:
+      - name: zoom
+        url: https://zoom.us/client/latest/zoom_x86_64.rpm
+      - name: dropbox
+        url: https://www.dropbox.com/download?dl=packages/fedora/nautilus-dropbox-2024.04.17-1.fc39.x86_64.rpm
+    pipx:
+      - cookiecutter
+  darwin:
+    taps:
+      - r-lib/rig
+      - koekeishiya/formulae
+    brews:
+      - gh
+      - curl
+      - fastfetch
+      - fortune
+      - skhd
+      - yabai
+      - starship
+      - python
+      - pipx
+      - llvm
+      - sqlite
+      - tldr
+      - mas
+    casks:
+      - appcleaner
+      - arc
+      - db-browser-for-sqlite
+      - docker
+      - devpod
+      - font-victor-mono-nerd-font
+      - font-fira-sans
+      - font-fira-mono
+      - font-fira-code-nerd-font
+      - inkscape
+      - itsycal
+      - iina
+      - hiddenbar
+      - miktex-console
+      - obsidian
+      - positron
+      - quarto
+      - raycast
+      - rig
+      - spotify
+      - stats
+      - surfshark
+      - the-unarchiver
+      - visual-studio-code
+      - warp
+      - whatsapp
+      - zoom
+      - zotero
+    mas:
+      - 1295203466 # Microsoft Remote Desktop
+      - 937984704 # Amphetamine
+      - 1352778147 # Bitwarden
+      - 1545870783 # Color Picker
+      - 363738376 # forScore
+      - 6469021132 # PDFgear
+    pipx:
+      - radian
+      - cookiecutter

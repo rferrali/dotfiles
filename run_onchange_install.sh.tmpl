@@ -1,0 +1,176 @@
+#!/bin/bash
+
+# ---- functions ----
+
+install_pipx() {
+    local app=$1
+    if ! command -v "$app" &> /dev/null; then
+        echo "📥 Installing $app..."
+        pipx install "$app"
+    fi
+}
+
+install_web_app() {
+    local app_name=$1
+    local app_url=$2
+
+    if ! command -v "$app_name" &> /dev/null
+    then
+        echo "📥 Installing $app_name..."
+        curl -L -o /tmp/app.rpm "$app_url" && sudo dnf install -y /tmp/app.rpm
+    else
+        echo "✅ $app_name is already installed."
+    fi
+}
+
+install_zsh_plugin() {
+    local plugin=$1
+    if [! -d "$HOME/.oh-my-zsh/custom/plugins/$plugin" ]; then
+        echo "📥 Installing $plugin..."
+        git clone https://github.com/zsh-users/$plugin $HOME/.oh-my-zsh/custom/plugins/$plugin
+    fi
+}
+
+echo "🦹 This script requires administrator privileges. Enter your password."
+sudo -v
+echo "🦹 You are now logged as root ✅"
+
+{{ if eq .chezmoi.os "darwin" }}
+taps=(
+    {{ range .packages.darwin.taps }}{{ . }}
+    {{ end }})
+
+brews=(
+    {{ range .packages.darwin.brews }}{{ . }}
+    {{ end }})
+
+casks=(
+    {{ range .packages.darwin.casks }}{{ . }}
+    {{ end }})
+
+mas=(
+    {{ range .packages.darwin.mas }}{{ . }}
+    {{ end }})
+
+echo "💻 Installing Xcode Command Line Tools..."
+xcode-select --install
+if test ! $(which brew) 
+then
+  echo "🍺 Installing Homebrew..."
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> /Users/$user/.zprofile
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+  echo "🍺 Installing Homebrew ✅"
+fi
+for tap in "${taps[@]}"; do
+    brew tap $tap
+done
+echo "☁️ Updating homebrew..."
+brew update
+echo "🍺 Installing brew apps..."
+brew install "${brews[@]}"
+echo "🍺 Installing brew casks..."
+brew install --cask "${casks[@]}"
+echo "🧹 Cleaning up..."
+brew cleanup -s
+echo " Installing App Store apps..."
+mas install "${mas[@]}"
+echo "🐍 Installing pipx packages..."
+{{ range .packages.darwin.pipx }}install_pipx {{ . }}
+{{ end }}
+
+{{ end }}
+
+{{ if eq .chezmoi.os "linux" }}
+copr=(
+    {{ range .packages.linux.copr }}{{ . }}
+    {{ end }})
+dnf_packages=(
+    {{ range .packages.linux.dnf_packages }}{{ . }}
+    {{ end }})
+flatpaks=(
+    {{ range .packages.linux.flatpaks }}{{ . }}
+    {{ end }})
+
+# Enable repositories if they haven't been enabled
+if ! dnf repolist | grep -q 'terra'; then
+    echo "🌍 Enabling repository terra"
+    sudo dnf install -y --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release
+fi
+if ! dnf repolist | grep -q 'gh-cli'; then
+    echo "🌍 Enabling repository gh-cli"
+    sudo dnf config-manager addrepo --from-repofile=https://cli.github.com/packages/rpm/gh-cli.repo
+fi
+if ! dnf repolist | grep -q 'docker-ce-stable'; then
+    echo "🌍 Enabling repository docker-ce-stable"
+    sudo dnf config-manager addrepo --from-repofile=https://download.docker.com/linux/fedora/docker-ce.repo
+fi
+if ! dnf repolist | grep -q 'vscode'; then
+    echo "🌍 Enabling repository vscode"
+    sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
+    echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\nautorefresh=1\ntype=rpm-md\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
+fi
+
+for repo in "${copr[@]}"; do
+    repo_name="${repo//\//:}"
+    if ! dnf repolist | grep -q "copr:copr.fedorainfracloud.org:$repo_name"; then
+        echo "🌍 Enabling repository $repo"
+        sudo dnf copr enable -y "$repo"
+    fi
+done
+
+dnf check-update
+echo "📦 Installing apps from dnf..."
+sudo dnf install -y "${apps[@]}"
+echo "📦 Installing flatpaks..."
+flatpak install -y flathub "${flatpaks[@]}"
+echo "🌍 Installing apps from the web..."
+{{ range .packages.linux.web }}install_web_app {{ .name | quote }} {{ .url | quote }}
+{{ end }}
+echo "🐍 Installing pipx packages..."
+{{ range .packages.linux.pipx }}install_pipx {{ . }}
+{{ end }}
+
+# --- Microsoft fonts ---
+if [ ! -d "/usr/share/fonts/msttcore" ]; then
+    echo "🌍 Installing Microsoft fonts"
+    sudo dnf install -y https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
+fi
+
+sudo dconf update
+{{ end }}
+
+# --- Oh My Zsh ---
+
+echo "🛠️ Configuring Zsh..."
+if [[ "$SHELL" != *zsh* ]]; then
+    echo "🛠️ Setting Zsh as default shell..."
+    chsh -s /usr/bin/zsh
+fi
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    echo "🛠️ Installing Oh My Zsh..."
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+fi
+echo "🛠️ Installing zsh plugins..."
+{{ range .zsh }}install_zsh_plugin {{ . }}
+{{ end }}
+
+# --- SSH ---
+# echo "🔐 Configuring SSH..."
+# mkdir -p $HOME/.ssh
+# rm -f $HOME/.ssh/config
+# ln -s $HOME/.dot-files/.ssh/config $HOME/.ssh/config
+# chmod 600 $HOME/.ssh/config
+# ln -s $HOME/.dot-files/.ssh/id_ed25519 $HOME/.ssh/id_ed25519
+# ln -s $HOME/.dot-files/.ssh/id_ed25519.pub $HOME/.ssh/id_ed25519.pub
+
+# --- Docker ---
+# echo "🐳 Configuring Docker..."
+# sudo groupadd docker
+# sudo usermod -aG docker $USER
+# sudo systemctl enable --now docker
+
+
+
+echo "🎉 Installation complete!"
+
