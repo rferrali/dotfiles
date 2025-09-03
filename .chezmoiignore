@@ -1,0 +1,4 @@
+{{- if ne .chezmoi.hostname "darwin" }}
+.config/yabai
+.config/skhd
+{{- end }}
