@@ -1,0 +1,21 @@
+#!/bin/bash
+set -euo pipefail
+
+host="$(pass show amu/ip)"
+user="$(pass show amu/user)"
+
+block="
+
+Host amu
+  HostName $host
+  User $user
+  Port 22
+"
+
+# Read stdin
+content="$(cat)"
+
+printf "$content"
+if ! echo "$content" | grep -qE '^[[:space:]]*Host[[:space:]]+amu(\s|$)'; then
+  printf "%s\n\n" "$block"
+fi
