@@ -1,21 +1,31 @@
 #!/bin/bash
-set -euo pipefail
+set -eo pipefail
 
-host="$(pass show amu/ip)"
-user="$(pass show amu/user)"
-
-block="
-
-Host amu
-  HostName $host
-  User $user
-  Port 22
-"
-
-# Read stdin
 content="$(cat)"
 
 printf "$content"
 if ! echo "$content" | grep -qE '^[[:space:]]*Host[[:space:]]+amu(\s|$)'; then
-  printf "%s\n\n" "$block"
+  case "$(uname -s)" in
+  Darwin)
+      BW="bw"
+      ;;
+  Linux)
+      BW="flatpak run --command=bw com.bitwarden.desktop"
+      ;;
+  esac
+  if [ "$($BW config server 2>/dev/null)" != "https://vault.bitwarden.eu" ]; then
+    $BW config server https://vault.bitwarden.eu
+  fi
+  if [ -z "$BW_SESSION" ]; then
+    echo "🚨 Variable BW_SESSION is not defined. Make sure you are logged into Bitwarden and try again." >&2
+    echo "- To login: $BW login" >&2
+    echo "- To get a session token: $BW unlock" >&2
+    echo "Then follow the instructions and re-run this command" >&2
+    exit 1
+  fi
+  block="Host amu
+  HostName $($BW get notes AMU-server-ip)
+  User $($BW get notes AMU-server-user)
+  Port 22"
+  printf "\n\n%s\n\n" "$block"
 fi
