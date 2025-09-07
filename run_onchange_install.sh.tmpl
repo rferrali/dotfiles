@@ -91,6 +91,9 @@ dnf_packages=(
 flatpaks=(
     {{ range .packages.linux.flatpaks }}{{ . }}
     {{ end }})
+gnome_extensions=(
+    {{ range .packages.linux.gnome_extensions }}{{ . }}
+    {{ end }})
 
 # Enable repositories if they haven't been enabled
 if ! dnf repolist | grep -q 'terra'; then
@@ -149,6 +152,10 @@ if [ ! -d "/usr/share/fonts/msfonts" ]; then
     rm -rf "$tmp_dir"
     sudo fc-cache -fv
 fi
+
+# --- GNOME Extensions ---
+echo "🧩 Installing GNOME extensions..."
+gext install "${gnome_extensions[@]}"
 
 sudo dconf update
 {{ end }}
