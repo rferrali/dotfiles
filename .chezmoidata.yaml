@@ -28,8 +28,6 @@ packages:
       - gnome-tweaks
       - libappindicator-gtk3
       - python3-gpg
-      - cabextract
-      - xorg-x11-font-utils
       - davmail
     flatpaks:
       - md.obsidian.Obsidian
@@ -45,7 +43,7 @@ packages:
         url: https://zoom.us/client/latest/zoom_x86_64.rpm
       - name: dropbox
         url: https://www.dropbox.com/download?dl=packages/fedora/nautilus-dropbox-2024.04.17-1.fc39.x86_64.rpm
-      - name: warp
+      - name: warp-terminal
         url: https://app.warp.dev/download?package=rpm
     pipx:
       - cookiecutter

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -euo pipefail
+
 # ---- functions ----
 
 install_pipx() {
@@ -18,8 +20,6 @@ install_web_app() {
     then
         echo "📥 Installing $app_name..."
         curl -L -o /tmp/app.rpm "$app_url" && sudo dnf install -y /tmp/app.rpm
-    else
-        echo "✅ $app_name is already installed."
     fi
 }
 
@@ -121,20 +121,33 @@ done
 
 dnf check-update
 echo "📦 Installing apps from dnf..."
-sudo dnf install -y "${apps[@]}"
+sudo dnf install -y "${dnf_packages[@]}"
 echo "📦 Installing flatpaks..."
 flatpak install -y flathub "${flatpaks[@]}"
 echo "🌍 Installing apps from the web..."
 {{ range .packages.linux.web }}install_web_app {{ .name | quote }} {{ .url | quote }}
 {{ end }}
+# --- GlobalProtect VPN ---
+if ! command -v "globalprotect" &> /dev/null
+then
+    echo "📥 Installing globalprotect..."
+    gp_url=$(flatpak run --command=bw com.bitwarden.desktop get notes globalprotect)
+    curl -L -o /tmp/app.rpm "$gp_url" && sudo dnf install -y /tmp/app.rpm
+fi
+
 echo "🐍 Installing pipx packages..."
 {{ range .packages.linux.pipx }}install_pipx {{ . }}
 {{ end }}
 
 # --- Microsoft fonts ---
-if [ ! -d "/usr/share/fonts/msttcore" ]; then
+if [ ! -d "/usr/share/fonts/msfonts" ]; then
     echo "🌍 Installing Microsoft fonts"
-    sudo dnf install -y https://downloads.sourceforge.net/project/mscorefonts2/rpms/msttcore-fonts-installer-2.6-1.noarch.rpm
+    tmp_dir=$(mktemp -d)
+    font_zip="$tmp_dir/msfonts.zip"
+    curl -L $(flatpak run --command=bw com.bitwarden.desktop get notes msfonts) -o "$font_zip"
+    sudo unzip -o "$font_zip" -d /usr/share/fonts
+    rm -rf "$tmp_dir"
+    sudo fc-cache -fv
 fi
 
 sudo dconf update
@@ -161,12 +174,15 @@ echo "🔐 Configuring SSH..."
 mkdir -p $HOME/.ssh
 touch $HOME/.ssh/config
 
+{{ if eq .chezmoi.os "linux" }}
 # --- Docker ---
-# echo "🐳 Configuring Docker..."
-# sudo groupadd docker
-# sudo usermod -aG docker $USER
-# sudo systemctl enable --now docker
-
+echo "🐳 Configuring Docker..."
+if ! getent group docker > /dev/null; then
+  sudo groupadd docker
+fi
+sudo usermod -aG docker $USER
+sudo systemctl enable --now docker
+{{ end }}
 
 
 echo "🎉 Installation complete!"
