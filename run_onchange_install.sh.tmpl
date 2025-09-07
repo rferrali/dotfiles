@@ -25,7 +25,7 @@ install_web_app() {
 
 install_zsh_plugin() {
     local plugin=$1
-    if [! -d "$HOME/.oh-my-zsh/custom/plugins/$plugin" ]; then
+    if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/$plugin" ]; then
         echo "📥 Installing $plugin..."
         git clone https://github.com/zsh-users/$plugin $HOME/.oh-my-zsh/custom/plugins/$plugin
     fi
@@ -156,13 +156,10 @@ echo "🛠️ Installing zsh plugins..."
 {{ end }}
 
 # --- SSH ---
-# echo "🔐 Configuring SSH..."
-# mkdir -p $HOME/.ssh
-# rm -f $HOME/.ssh/config
-# ln -s $HOME/.dot-files/.ssh/config $HOME/.ssh/config
-# chmod 600 $HOME/.ssh/config
-# ln -s $HOME/.dot-files/.ssh/id_ed25519 $HOME/.ssh/id_ed25519
-# ln -s $HOME/.dot-files/.ssh/id_ed25519.pub $HOME/.ssh/id_ed25519.pub
+
+echo "🔐 Configuring SSH..."
+mkdir -p $HOME/.ssh
+touch $HOME/.ssh/config
 
 # --- Docker ---
 # echo "🐳 Configuring Docker..."
