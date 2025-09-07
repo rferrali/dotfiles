@@ -39,14 +39,17 @@ packages:
       - com.mattjakeman.ExtensionManager
       - sh.loft.devpod
       - com.github.tchx84.Flatseal
-      - net.thunderbird.Thunderbird
+      - com.bitwarden.desktop
     web:
       - name: zoom
         url: https://zoom.us/client/latest/zoom_x86_64.rpm
       - name: dropbox
         url: https://www.dropbox.com/download?dl=packages/fedora/nautilus-dropbox-2024.04.17-1.fc39.x86_64.rpm
+      - name: warp
+        url: https://app.warp.dev/download?package=rpm
     pipx:
       - cookiecutter
+      - gnome-extensions-cli
   darwin:
     taps:
       - r-lib/rig
