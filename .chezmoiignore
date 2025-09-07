@@ -3,3 +3,7 @@ README.md
 .config/yabai
 .config/skhd
 {{- end }}
+{{- if ne .chezmoi.os "linux" }}
+.davmail.*
+.local/share/applications/davmail.desktop
+{{- end }}
