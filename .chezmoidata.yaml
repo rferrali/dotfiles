@@ -100,7 +100,6 @@ packages:
       - the-unarchiver
       - visual-studio-code
       - warp
-      - whatsapp
       - zoom
       - zotero
     mas:
@@ -110,6 +109,7 @@ packages:
       - 1545870783 # Color Picker
       - 363738376 # forScore
       - 6469021132 # PDFgear
+      - 310633997 # Whatsapp
     pipx:
       - radian
       - cookiecutter

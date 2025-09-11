@@ -53,7 +53,9 @@ mas=(
     {{ end }})
 
 echo "💻 Installing Xcode Command Line Tools..."
-xcode-select --install
+if ! xcode-select -p &>/dev/null; then
+    xcode-select --install
+fi
 if test ! $(which brew) 
 then
   echo "🍺 Installing Homebrew..."
