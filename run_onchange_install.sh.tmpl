@@ -36,9 +36,6 @@ sudo -v
 echo "🦹 You are now logged as root ✅"
 
 {{ if eq .chezmoi.os "darwin" }}
-taps=(
-    {{ range .packages.darwin.taps }}{{ . }}
-    {{ end }})
 
 brews=(
     {{ range .packages.darwin.brews }}{{ . }}
