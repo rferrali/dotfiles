@@ -56,28 +56,16 @@ packages:
       - caffeine@patapon.info
       - tilingshell@ferrarodomenico.com
   darwin:
-    taps:
-      - r-lib/rig
-      - koekeishiya/formulae
     brews:
       - gh
-      - curl
       - fastfetch
       - fortune
-      - skhd
-      - yabai
       - starship
       - python
       - pipx
-      - llvm
-      - sqlite
       - tldr
       - mas
-      - pass
     casks:
-      - appcleaner
-      - arc
-      - db-browser-for-sqlite
       - docker
       - devpod
       - font-victor-mono-nerd-font
@@ -85,15 +73,9 @@ packages:
       - font-fira-mono
       - font-fira-code-nerd-font
       - inkscape
-      - itsycal
       - iina
-      - hiddenbar
-      - miktex-console
       - obsidian
       - positron
-      - quarto
-      - raycast
-      - rig
       - spotify
       - stats
       - surfshark
@@ -102,12 +84,11 @@ packages:
       - warp
       - zoom
       - zotero
+      - dropbox
     mas:
       - 1295203466 # Microsoft Remote Desktop
       - 937984704 # Amphetamine
       - 1352778147 # Bitwarden
-      - 1545870783 # Color Picker
-      - 363738376 # forScore
       - 6469021132 # PDFgear
       - 310633997 # Whatsapp
     pipx:

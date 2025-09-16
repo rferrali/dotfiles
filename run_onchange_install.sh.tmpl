@@ -64,9 +64,6 @@ then
   eval "$(/opt/homebrew/bin/brew shellenv)"
   echo "🍺 Installing Homebrew ✅"
 fi
-for tap in "${taps[@]}"; do
-    brew tap $tap
-done
 echo "☁️ Updating homebrew..."
 brew update
 echo "🍺 Installing brew apps..."
