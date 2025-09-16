@@ -56,6 +56,9 @@ packages:
       - caffeine@patapon.info
       - tilingshell@ferrarodomenico.com
   darwin:
+    taps:
+      - r-lib/rig
+      - koekeishiya/formulae
     brews:
       - gh
       - fastfetch
