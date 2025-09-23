@@ -31,9 +31,18 @@ if ! echo "$content" | grep -qE '^[[:space:]]*Host[[:space:]]+amu(\s|$)'; then
 fi
 
 if ! echo "$content" | grep -qE '^[[:space:]]*IdentityFile[[:space:]]+~/.ssh/id_ed25519(\s|$)'; then
-  block="Host *
+  case "$(uname -s)" in
+    Darwin)
+      block="Host *
   AddKeysToAgent yes
   UseKeychain yes
   IdentityFile ~/.ssh/id_ed25519"
+      ;;
+    *)
+      block="Host *
+  AddKeysToAgent yes
+  IdentityFile ~/.ssh/id_ed25519"
+      ;;
+  esac
   printf "\n\n%s\n\n" "$block"
 fi
