@@ -118,7 +118,8 @@ for repo in "${copr[@]}"; do
     fi
 done
 
-dnf check-update
+# Check for updates and perform them if available
+sudo dnf upgrade -y
 echo "📦 Installing apps from dnf..."
 sudo dnf install -y "${dnf_packages[@]}"
 echo "📦 Installing flatpaks..."
