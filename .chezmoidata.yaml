@@ -51,12 +51,13 @@ packages:
       - gnome-extensions-cli
     gnome_extensions:
       - nightthemeswitcher@romainvigier.fr
-      - dash-to-panel@jderose9.github.com
+      - dash-to-dock@micxgx.gmail.com
       - blur-my-shell@aunetx
       - appindicatorsupport@rgcjonas.gmail.com
-      - randomwallpaper@iflow.space
       - caffeine@patapon.info
       - tilingshell@ferrarodomenico.com
+      - system-monitor@gnome-shell-extensions.gcampax.github.com
+      - emoji-copy@felipeftn
   darwin:
     taps:
       - r-lib/rig
