@@ -1,18 +1,8 @@
 # ---- path ----
 PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
-{{ if eq .chezmoi.os "darwin" }}
-PATH=$HOME/perl5/bin:$PATH
-PATH="/Applications/Stata/StataMP.app/Contents/MacOS/:$PATH"
-{{ end }}
 export PATH
 
 # ---- environment variables ----
-{{ if eq .chezmoi.os "darwin" }}
-PERL5LIB="/Users/romain/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
-PERL_LOCAL_LIB_ROOT="/Users/romain/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
-PERL_MB_OPT="--install_base \"/Users/romain/perl5\""; export PERL_MB_OPT;
-PERL_MM_OPT="INSTALL_BASE=/Users/romain/perl5"; export PERL_MM_OPT;
-{{ end }}
 
 # ---- oh-my-zsh ---
 {{ if eq .chezmoi.os "linux" }}
@@ -31,6 +21,7 @@ source $ZSH/oh-my-zsh.sh
 {{ if eq .chezmoi.os "linux" }}
 alias bw="flatpak run --command=bw com.bitwarden.desktop"
 {{ end }}
+alias ls="eza --icons"
 
 # ---- load relevant utils ----
 # - starship

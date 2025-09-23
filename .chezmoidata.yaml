@@ -27,6 +27,8 @@ packages:
       - gnome-tweaks
       - libappindicator-gtk3
       - python3-gpg
+      - zoxide
+      - eza
     flatpaks:
       - md.obsidian.Obsidian
       - com.spotify.Client
@@ -68,6 +70,8 @@ packages:
       - pipx
       - tldr
       - mas
+      - zoxide
+      - eza
     casks:
       - docker
       - devpod
@@ -88,6 +92,7 @@ packages:
       - zoom
       - zotero
       - dropbox
+      - firefox
     mas:
       - 1295203466 # Microsoft Remote Desktop
       - 937984704 # Amphetamine
@@ -95,5 +100,4 @@ packages:
       - 6469021132 # PDFgear
       - 310633997 # Whatsapp
     pipx:
-      - radian
       - cookiecutter
