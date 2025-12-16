@@ -30,6 +30,33 @@ if ! echo "$content" | grep -qE '^[[:space:]]*Host[[:space:]]+amu(\s|$)'; then
   printf "\n\n%s\n\n" "$block"
 fi
 
+printf "$content"
+if ! echo "$content" | grep -qE '^[[:space:]]*Host[[:space:]]+contabo(\s|$)'; then
+  case "$(uname -s)" in
+  Darwin)
+      BW="bw"
+      ;;
+  Linux)
+      BW="flatpak run --command=bw com.bitwarden.desktop"
+      ;;
+  esac
+  if [ "$($BW config server 2>/dev/null)" != "https://vault.bitwarden.eu" ]; then
+    $BW config server https://vault.bitwarden.eu
+  fi
+  if [ -z "$BW_SESSION" ]; then
+    echo "🚨 Variable BW_SESSION is not defined. Make sure you are logged into Bitwarden and try again." >&2
+    echo "- To login: $BW login" >&2
+    echo "- To get a session token: $BW unlock" >&2
+    echo "Then follow the instructions and re-run this command" >&2
+    exit 1
+  fi
+  block="Host contabo
+  HostName $($BW get notes CONTABO-server-ip)
+  User $($BW get notes CONTABO-server-user)
+  Port 22"
+  printf "\n\n%s\n\n" "$block"
+fi
+
 if ! echo "$content" | grep -qE '^[[:space:]]*IdentityFile[[:space:]]+~/.ssh/id_ed25519(\s|$)'; then
   case "$(uname -s)" in
     Darwin)
