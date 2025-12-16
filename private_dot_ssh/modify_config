@@ -30,7 +30,6 @@ if ! echo "$content" | grep -qE '^[[:space:]]*Host[[:space:]]+amu(\s|$)'; then
   printf "\n\n%s\n\n" "$block"
 fi
 
-printf "$content"
 if ! echo "$content" | grep -qE '^[[:space:]]*Host[[:space:]]+contabo(\s|$)'; then
   case "$(uname -s)" in
   Darwin)
@@ -57,7 +56,7 @@ if ! echo "$content" | grep -qE '^[[:space:]]*Host[[:space:]]+contabo(\s|$)'; th
   printf "\n\n%s\n\n" "$block"
 fi
 
-if ! echo "$content" | grep -qE '^[[:space:]]*IdentityFile[[:space:]]+~/.ssh/id_ed25519(\s|$)'; then
+if ! echo "$content" | grep -qE '^[[:space:]]*Host[[:space:]]+\*(\s|$)'; then
   case "$(uname -s)" in
     Darwin)
       block="Host *
