@@ -69,7 +69,6 @@ packages:
       - starship
       - python
       - pipx
-      - tldr
       - mas
       - zoxide
       - eza
@@ -93,7 +92,8 @@ packages:
       - zoom
       - zotero
       - dropbox
-      - firefox
+      - google-chrome
+      - utm
     mas:
       - 1295203466 # Microsoft Remote Desktop
       - 937984704 # Amphetamine
