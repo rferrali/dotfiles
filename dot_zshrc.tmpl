@@ -17,7 +17,10 @@ zstyle ':omz:update' mode auto      # update automatically without asking
 zstyle ':omz:update' frequency 13
 source $ZSH/oh-my-zsh.sh
 
-
+{{ if eq .chezmoi.os "linux" }}
+# ---- brew ----
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"
+{{ end }}
 
 # ---- aliases ----
 alias ls="eza --icons"
@@ -25,11 +28,17 @@ alias ls="eza --icons"
 # ---- load relevant utils ----
 # - starship
 eval "$(starship init zsh)"
+# - fzf
+source <(fzf --zsh)
 # - zoxide
 eval "$(zoxide init zsh --cmd cd)"
 
 
 # ---- launch message ----
+fastfetch
+
+echo '\n'
+echo '\n'
 echo '\nHello, Master Romain! Your Terminal wishes you a lovely day ❤️  and throws in a word of wisdom 🧐'
 echo '\n┌─────────────────────────────── Wisdom ───────────────────────────────────┐'
 fortune
