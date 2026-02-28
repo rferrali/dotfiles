@@ -18,9 +18,6 @@ packages:
     pipx:
       - cookiecutter
   darwin:
-    taps:
-      - r-lib/rig
-      - koekeishiya/formulae
     brews:
       - gh
       - fastfetch
