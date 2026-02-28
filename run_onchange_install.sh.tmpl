@@ -127,28 +127,10 @@ flatpak install -y flathub "${flatpaks[@]}"
 echo "🌍 Installing apps from the web..."
 {{ range .packages.linux.web }}install_web_app {{ .name | quote }} {{ .url | quote }}
 {{ end }}
-# --- GlobalProtect VPN ---
-if ! command -v "globalprotect" &> /dev/null
-then
-    echo "📥 Installing globalprotect..."
-    gp_url=$(flatpak run --command=bw com.bitwarden.desktop get notes globalprotect)
-    curl -L -o /tmp/app.rpm "$gp_url" && sudo dnf install -y /tmp/app.rpm
-fi
 
 echo "🐍 Installing pipx packages..."
 {{ range .packages.linux.pipx }}install_pipx {{ . }}
 {{ end }}
-
-# --- Microsoft fonts ---
-if [ ! -d "/usr/share/fonts/msfonts" ]; then
-    echo "🌍 Installing Microsoft fonts"
-    tmp_dir=$(mktemp -d)
-    font_zip="$tmp_dir/msfonts.zip"
-    curl -L $(flatpak run --command=bw com.bitwarden.desktop get notes msfonts) -o "$font_zip"
-    sudo unzip -o "$font_zip" -d /usr/share/fonts
-    rm -rf "$tmp_dir"
-    sudo fc-cache -fv
-fi
 
 # --- GNOME Extensions ---
 echo "🧩 Installing GNOME extensions..."

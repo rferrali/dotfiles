@@ -18,9 +18,6 @@ zstyle ':omz:update' frequency 13
 source $ZSH/oh-my-zsh.sh
 
 # ---- aliases ----
-{{ if eq .chezmoi.os "linux" }}
-alias bw="flatpak run --command=bw com.bitwarden.desktop"
-{{ end }}
 alias ls="eza --icons"
 
 # ---- load relevant utils ----

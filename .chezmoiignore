@@ -1,10 +1,1 @@
 README.md
-{{- if ne .chezmoi.os "darwin" }}
-.config/yabai
-.config/skhd
-{{- end }}
-{{- if ne .chezmoi.os "linux" }}
-.davmail.security
-.davmail.properties
-.local/share/applications/davmail.desktop
-{{- end }}

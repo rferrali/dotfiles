@@ -37,7 +37,6 @@ packages:
       - com.mattjakeman.ExtensionManager
       - sh.loft.devpod
       - com.github.tchx84.Flatseal
-      - com.bitwarden.desktop
       - org.mozilla.Thunderbird
     web:
       - name: zoom
@@ -97,7 +96,6 @@ packages:
     mas:
       - 1295203466 # Microsoft Remote Desktop
       - 937984704 # Amphetamine
-      - 1352778147 # Bitwarden
       - 6469021132 # PDFgear
       - 310633997 # Whatsapp
     pipx:
