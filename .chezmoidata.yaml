@@ -3,60 +3,20 @@ zsh:
   - zsh-syntax-highlighting
 packages:
   linux:
-    copr:
-      - el-file4138/zotero
-      - aquacash5/nerd-fonts
-    dnf_packages:
-      - docker-ce
-      - docker-ce-cli
-      - containerd.io
-      - docker-buildx-plugin
-      - code
+    brews:
+      - gh
       - fastfetch
       - fortune
       - starship
-      - tldr
-      - zsh
-      - mozilla-fira-sans-fonts
-      - mozilla-fira-mono-fonts
-      - fira-code-nerd-fonts
-      - victor-mono-nerd-fonts
-      - python3-devel
+      - python
       - pipx
-      - zotero
-      - gnome-tweaks
-      - libappindicator-gtk3
-      - python3-gpg
       - zoxide
       - eza
-    flatpaks:
-      - md.obsidian.Obsidian
-      - com.spotify.Client
-      - com.surfshark.Surfshark
-      - org.inkscape.Inkscape
-      - com.mattjakeman.ExtensionManager
-      - sh.loft.devpod
-      - com.github.tchx84.Flatseal
-      - org.mozilla.Thunderbird
-    web:
-      - name: zoom
-        url: https://zoom.us/client/latest/zoom_x86_64.rpm
-      - name: dropbox
-        url: https://www.dropbox.com/download?dl=packages/fedora/nautilus-dropbox-2024.04.17-1.fc39.x86_64.rpm
-      - name: warp-terminal
-        url: https://app.warp.dev/download?package=rpm
+      - fzf
+    apt_packages:
+      - zsh
     pipx:
       - cookiecutter
-      - gnome-extensions-cli
-    gnome_extensions:
-      - nightthemeswitcher@romainvigier.fr
-      - dash-to-dock@micxgx.gmail.com
-      - blur-my-shell@aunetx
-      - appindicatorsupport@rgcjonas.gmail.com
-      - caffeine@patapon.info
-      - tilingshell@ferrarodomenico.com
-      - system-monitor@gnome-shell-extensions.gcampax.github.com
-      - emoji-copy@felipeftn
   darwin:
     taps:
       - r-lib/rig
@@ -71,6 +31,7 @@ packages:
       - mas
       - zoxide
       - eza
+      - fzf
     casks:
       - docker
       - devpod

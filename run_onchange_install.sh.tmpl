@@ -12,17 +12,6 @@ install_pipx() {
     fi
 }
 
-install_web_app() {
-    local app_name=$1
-    local app_url=$2
-
-    if ! command -v "$app_name" &> /dev/null
-    then
-        echo "📥 Installing $app_name..."
-        curl -L -o /tmp/app.rpm "$app_url" && sudo dnf install -y /tmp/app.rpm
-    fi
-}
-
 install_zsh_plugin() {
     local plugin=$1
     if [ ! -d "$HOME/.oh-my-zsh/custom/plugins/$plugin" ]; then
@@ -78,65 +67,38 @@ echo "🐍 Installing pipx packages..."
 {{ end }}
 
 {{ if eq .chezmoi.os "linux" }}
-copr=(
-    {{ range .packages.linux.copr }}{{ . }}
+brews=(
+    {{ range .packages.linux.brews }}{{ . }}
     {{ end }})
-dnf_packages=(
-    {{ range .packages.linux.dnf_packages }}{{ . }}
+apt_packages=(
+    {{ range .packages.linux.apt_packages }}{{ . }}
     {{ end }})
-flatpaks=(
-    {{ range .packages.linux.flatpaks }}{{ . }}
-    {{ end }})
-gnome_extensions=(
-    {{ range .packages.linux.gnome_extensions }}{{ . }}
-    {{ end }})
-
-# Enable repositories if they haven't been enabled
-if ! dnf repolist | grep -q 'terra'; then
-    echo "🌍 Enabling repository terra"
-    sudo dnf install -y --nogpgcheck --repofrompath 'terra,https://repos.fyralabs.com/terra$releasever' terra-release
-fi
-if ! dnf repolist | grep -q 'gh-cli'; then
-    echo "🌍 Enabling repository gh-cli"
-    sudo dnf config-manager addrepo --from-repofile=https://cli.github.com/packages/rpm/gh-cli.repo
-fi
-if ! dnf repolist | grep -q 'docker-ce-stable'; then
-    echo "🌍 Enabling repository docker-ce-stable"
-    sudo dnf config-manager addrepo --from-repofile=https://download.docker.com/linux/fedora/docker-ce.repo
-fi
-if ! dnf repolist | grep -q 'vscode'; then
-    echo "🌍 Enabling repository vscode"
-    sudo rpm --import https://packages.microsoft.com/keys/microsoft.asc
-    echo -e "[code]\nname=Visual Studio Code\nbaseurl=https://packages.microsoft.com/yumrepos/vscode\nenabled=1\nautorefresh=1\ntype=rpm-md\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" | sudo tee /etc/yum.repos.d/vscode.repo > /dev/null
-fi
-
-for repo in "${copr[@]}"; do
-    repo_name="${repo//\//:}"
-    if ! dnf repolist | grep -q "copr:copr.fedorainfracloud.org:$repo_name"; then
-        echo "🌍 Enabling repository $repo"
-        sudo dnf copr enable -y "$repo"
-    fi
-done
 
 # Check for updates and perform them if available
-sudo dnf upgrade -y
-echo "📦 Installing apps from dnf..."
-sudo dnf install -y "${dnf_packages[@]}"
-echo "📦 Installing flatpaks..."
-flatpak install -y flathub "${flatpaks[@]}"
-echo "🌍 Installing apps from the web..."
-{{ range .packages.linux.web }}install_web_app {{ .name | quote }} {{ .url | quote }}
-{{ end }}
+sudo apt-get update
+echo "📦 Installing apps from apt..."
+sudo apt-get install -y build-essential curl procps curl file git # brew dependencies
+sudo apt-get install -y "${apt_packages[@]}"
+
+if test ! $(which brew) 
+then
+  echo "🍺 Installing Homebrew..."
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  echo >> $HOME/.bashrc
+  echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"' >> $HOME/.bashrc
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"
+  echo "🍺 Installing Homebrew ✅"
+fi
+
+echo "🍺 Installing brew apps..."
+brew install "${brews[@]}"
+echo "🧹 Cleaning up..."
+brew cleanup -s
 
 echo "🐍 Installing pipx packages..."
 {{ range .packages.linux.pipx }}install_pipx {{ . }}
 {{ end }}
 
-# --- GNOME Extensions ---
-echo "🧩 Installing GNOME extensions..."
-gext install "${gnome_extensions[@]}"
-
-sudo dconf update
 {{ end }}
 
 # --- Oh My Zsh ---
@@ -152,22 +114,6 @@ if [ ! -d "$HOME/.oh-my-zsh" ]; then
 fi
 echo "🛠️ Installing zsh plugins..."
 {{ range .zsh }}install_zsh_plugin {{ . }}
-{{ end }}
-
-# --- SSH ---
-
-echo "🔐 Configuring SSH..."
-mkdir -p $HOME/.ssh
-touch $HOME/.ssh/config
-
-{{ if eq .chezmoi.os "linux" }}
-# --- Docker ---
-echo "🐳 Configuring Docker..."
-if ! getent group docker > /dev/null; then
-  sudo groupadd docker
-fi
-sudo usermod -aG docker $USER
-sudo systemctl enable --now docker
 {{ end }}
 
 
