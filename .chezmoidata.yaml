@@ -2,7 +2,7 @@ zsh:
   - zsh-autosuggestions
   - zsh-syntax-highlighting
 packages:
-  linux:
+  ubuntu:
     brews:
       - gh
       - fastfetch
@@ -17,6 +17,21 @@ packages:
       - zsh
     pipx:
       - cookiecutter
+  fedora:
+    copr:
+      - atim/starship
+      - aquacash5/nerd-fonts
+      - alternateved/eza
+    dnf_packages:
+      - starship
+      - fastfetch
+      - fortune
+      - zoxide
+      - eza
+      - fira-code-nerd-fonts
+      - victor-mono-nerd-fonts
+      - fzf
+      - zsh
   darwin:
     brews:
       - gh

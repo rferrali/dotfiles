@@ -67,11 +67,13 @@ echo "🐍 Installing pipx packages..."
 {{ end }}
 
 {{ if eq .chezmoi.os "linux" }}
+    {{ if eq .chezmoi.osRelease.id "ubuntu" }}
+    
 brews=(
-    {{ range .packages.linux.brews }}{{ . }}
+    {{ range .packages.ubuntu.brews }}{{ . }}
     {{ end }})
 apt_packages=(
-    {{ range .packages.linux.apt_packages }}{{ . }}
+    {{ range .packages.ubuntu.apt_packages }}{{ . }}
     {{ end }})
 
 # Check for updates and perform them if available
@@ -96,9 +98,32 @@ echo "🧹 Cleaning up..."
 brew cleanup -s
 
 echo "🐍 Installing pipx packages..."
-{{ range .packages.linux.pipx }}install_pipx {{ . }}
+{{ range .packages.ubuntu.pipx }}install_pipx {{ . }}
 {{ end }}
 
+    {{ end }}
+    {{ if eq .chezmoi.osRelease.id "fedora" }}
+    
+copr=(
+    {{ range .packages.ubuntu.copr }}{{ . }}
+    {{ end }})
+dnf_packages=(
+    {{ range .packages.ubuntu.dnf_packages }}{{ . }}
+    {{ end }})
+
+for repo in "${copr[@]}"; do
+    repo_name="${repo//\//:}"
+    if ! dnf repolist | grep -q "copr:copr.fedorainfracloud.org:$repo_name"; then
+        echo "🌍 Enabling repository $repo"
+        sudo dnf copr enable -y "$repo"
+    fi
+done
+
+sudo dnf upgrade -y
+echo "📦 Installing apps from dnf..."
+sudo dnf install -y "${dnf_packages[@]}"
+
+    {{ end }}
 {{ end }}
 
 # --- Oh My Zsh ---
