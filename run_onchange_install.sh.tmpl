@@ -105,10 +105,10 @@ echo "🐍 Installing pipx packages..."
     {{ if eq .chezmoi.osRelease.id "fedora" }}
     
 copr=(
-    {{ range .packages.ubuntu.copr }}{{ . }}
+    {{ range .packages.fedora.copr }}{{ . }}
     {{ end }})
 dnf_packages=(
-    {{ range .packages.ubuntu.dnf_packages }}{{ . }}
+    {{ range .packages.fedora.dnf_packages }}{{ . }}
     {{ end }})
 
 for repo in "${copr[@]}"; do
