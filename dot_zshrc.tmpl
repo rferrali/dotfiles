@@ -1,6 +1,9 @@
 # ---- path ----
 PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 export PATH
+{{ if eq .chezmoi.os "linux" }}
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+{{ end }}
 
 # ---- environment variables ----
 
@@ -17,7 +20,7 @@ zstyle ':omz:update' mode auto      # update automatically without asking
 zstyle ':omz:update' frequency 13
 source $ZSH/oh-my-zsh.sh
 
-{{ if eq .chezmoi.os "linux" }}
+{{ if eq .chezmoi.osRelease.id "ubuntu" }}
 # ---- brew ----
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"
 {{ end }}
