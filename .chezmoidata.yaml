@@ -4,19 +4,15 @@ zsh:
 packages:
   ubuntu:
     brews:
-      - gh
       - fastfetch
       - fortune
       - starship
-      - python
       - pipx
       - zoxide
       - eza
       - fzf
     apt_packages:
       - zsh
-    pipx:
-      - cookiecutter
   fedora:
     copr:
       - atim/starship

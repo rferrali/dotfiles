@@ -97,10 +97,6 @@ brew install "${brews[@]}"
 echo "🧹 Cleaning up..."
 brew cleanup -s
 
-echo "🐍 Installing pipx packages..."
-{{ range .packages.ubuntu.pipx }}install_pipx {{ . }}
-{{ end }}
-
     {{ end }}
     {{ if eq .chezmoi.osRelease.id "fedora" }}
     
