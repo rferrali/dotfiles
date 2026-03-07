@@ -3,15 +3,13 @@ zsh:
   - zsh-syntax-highlighting
 packages:
   ubuntu:
-    brews:
+    apt_packages:
       - fastfetch
-      - fortune
+      - fortune-mod
       - starship
-      - pipx
       - zoxide
       - eza
       - fzf
-    apt_packages:
       - zsh
   fedora:
     copr:

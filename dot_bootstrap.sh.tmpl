@@ -69,9 +69,6 @@ echo "🐍 Installing pipx packages..."
 {{ if eq .chezmoi.os "linux" }}
     {{ if eq .chezmoi.osRelease.id "ubuntu" }}
     
-brews=(
-    {{ range .packages.ubuntu.brews }}{{ . }}
-    {{ end }})
 apt_packages=(
     {{ range .packages.ubuntu.apt_packages }}{{ . }}
     {{ end }})
@@ -79,23 +76,7 @@ apt_packages=(
 # Check for updates and perform them if available
 sudo apt-get update
 echo "📦 Installing apps from apt..."
-sudo apt-get install -y build-essential curl procps curl file git # brew dependencies
 sudo apt-get install -y "${apt_packages[@]}"
-
-if test ! $(which brew) 
-then
-  echo "🍺 Installing Homebrew..."
-  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  echo >> $HOME/.bashrc
-  echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"' >> $HOME/.bashrc
-  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv bash)"
-  echo "🍺 Installing Homebrew ✅"
-fi
-
-echo "🍺 Installing brew apps..."
-brew install "${brews[@]}"
-echo "🧹 Cleaning up..."
-brew cleanup -s
 
     {{ end }}
     {{ if eq .chezmoi.osRelease.id "fedora" }}
