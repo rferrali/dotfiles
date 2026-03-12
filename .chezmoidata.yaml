@@ -12,10 +12,34 @@ packages:
       - fzf
       - zsh
   fedora:
-    copr:
-      - atim/starship
-      - aquacash5/nerd-fonts
-      - alternateved/eza
+    repos:
+      copr:
+        - atim/starship
+        - aquacash5/nerd-fonts
+        - alternateved/eza
+        - atim/lazydocker
+        - yuezk/globalprotect-openconnect
+      dnf_repofile_repos:
+        - https://download.docker.com/linux/fedora/docker-ce.repo
+        - https://cli.github.com/packages/rpm/gh-cli.repo
+      dnf_rpm_repos:
+        - "https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm"
+        - "https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm"
+      dnf_gpg_repos:
+        - gpg_url: https://packages.microsoft.com/keys/microsoft.asc
+          repo_file: /etc/yum.repos.d/vscode.repo
+          repo_content: |
+            [code]
+            name=Visual Studio Code
+            baseurl=https://packages.microsoft.com/yumrepos/vscode
+            enabled=1
+            autorefresh=1
+            type=rpm-md
+            gpgcheck=1
+            gpgkey=https://packages.microsoft.com/keys/microsoft.asc
+        - gpg_url: "https://zoom.us/linux/download/pubkey?version=6-3-10"
+          repo_url: https://repo.zoom.us/repo/rpm/zoom_release.repo
+          repo_file: /etc/yum.repos.d/zoom_release.repo
     dnf_packages:
       - starship
       - fastfetch
@@ -26,6 +50,38 @@ packages:
       - victor-mono-nerd-fonts
       - fzf
       - zsh
+      - lazydocker
+      - globalprotect-openconnect
+      - celluloid
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+      - gh
+      - code
+      - zoom
+      # dropbox dependencies
+      - libappindicator
+      - python3-gpg
+      # codecs
+      - libavcodec-freeworld
+    flatpaks:
+      flathub:
+        - cn.wps.wps_365
+        - com.spotify.Client
+        - eu.betterbird.Betterbird
+        - md.obsidian.Obsidian
+      fedora:
+        - com.github.tchx84.Flatseal
+        - com.github.wwmm.easyeffects
+        - org.gnome.Extensions
+    post_install:
+      # docker
+      - sudo systemctl enable --now docker
+      - sudo usermod -aG docker $USER
+      # rpmfusion
+      - sudo dnf install -y ffmpeg --allowerasing
   darwin:
     brews:
       - gh

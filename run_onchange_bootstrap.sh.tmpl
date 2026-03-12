@@ -80,26 +80,69 @@ sudo apt-get install -y "${apt_packages[@]}"
 
     {{ end }}
     {{ if eq .chezmoi.osRelease.id "fedora" }}
-    
+
 copr=(
-    {{ range .packages.fedora.copr }}{{ . }}
+    {{ range .packages.fedora.repos.copr }}{{ . }}
     {{ end }})
 dnf_packages=(
     {{ range .packages.fedora.dnf_packages }}{{ . }}
     {{ end }})
+flatpaks_flathub=(
+    {{ range .packages.fedora.flatpaks.flathub }}{{ . }}
+    {{ end }})
+flatpaks_fedora=(
+    {{ range .packages.fedora.flatpaks.fedora }}{{ . }}
+    {{ end }})
 
+# Enable COPR repos
 for repo in "${copr[@]}"; do
     repo_name="${repo//\//:}"
     if ! dnf repolist | grep -q "copr:copr.fedorainfracloud.org:$repo_name"; then
-        echo "🌍 Enabling repository $repo"
+        echo "🌍 Enabling COPR repository $repo"
         sudo dnf copr enable -y "$repo"
     fi
 done
 
+# Add repofile repos (--overwrite makes this idempotent)
+{{ range .packages.fedora.repos.dnf_repofile_repos -}}
+echo "🌍 Adding repo {{ . }}..."
+sudo dnf config-manager addrepo --overwrite --from-repofile {{ . }}
+{{ end }}
+# Add RPM-based repos (dnf install is idempotent)
+{{ range .packages.fedora.repos.dnf_rpm_repos -}}
+echo "🌍 Installing RPM repo file {{ . }}..."
+sudo dnf install -y {{ . }}
+{{ end }}
+# Add GPG + repo-file repos (repo file creation skipped if already exists)
+{{ range .packages.fedora.repos.dnf_gpg_repos -}}
+echo "🔑 Importing GPG key {{ .gpg_url }}..."
+sudo rpm --import {{ .gpg_url }}
+if [ ! -f {{ .repo_file }} ]; then
+{{ if index . "repo_content" -}}
+    sudo tee {{ .repo_file }} > /dev/null << 'REPOEOF'
+{{ .repo_content }}REPOEOF
+{{ else if index . "repo_url" -}}
+    sudo curl --location {{ .repo_url }} --output {{ .repo_file }}
+{{ end -}}
+fi
+{{ end }}
 sudo dnf upgrade -y
 echo "📦 Installing apps from dnf..."
 sudo dnf install -y "${dnf_packages[@]}"
 
+# Flatpaks
+echo "📦 Installing flatpaks from flathub..."
+flatpak install -y flathub "${flatpaks_flathub[@]}"
+echo "📦 Installing flatpaks from fedora..."
+flatpak install -y fedora "${flatpaks_fedora[@]}"
+# for app in "${flatpaks_fedora[@]}"; do
+#     flatpak list --app --columns=application | grep -q "^$app$" || flatpak install -y fedora "$app"
+# done
+
+# Post-install steps
+{{ range .packages.fedora.post_install -}}
+{{ . }}
+{{ end }}
     {{ end }}
 {{ end }}
 
