@@ -34,6 +34,12 @@ Full setup for Fedora, including DNF and applications. Post installation steps:
 curl -fsSL https://claude.ai/install.sh | bash
 ```
 
+- Remove unnecessary packages:
+
+```bashbash
+sudo dnf remove firefox totem "libreoffice*" gnome-tour yelp
+```
+
 ## Help
 
 For help, please visit the [chezmoi documentation](https://www.chezmoi.io/docs/).
