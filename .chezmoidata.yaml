@@ -61,6 +61,7 @@ packages:
       - gh
       - code
       - zoom
+      - google-chrome-stable
       # dropbox dependencies
       - libappindicator
       - python3-gpg
