@@ -36,8 +36,33 @@ curl -fsSL https://claude.ai/install.sh | bash
 
 - Remove unnecessary packages:
 
-```bashbash
+```bash
 sudo dnf remove firefox totem "libreoffice*" gnome-tour yelp
+```
+
+- Use Wifi-based geolocation: edit `/etc/geoclue/geoclue.conf` and make sure or BeaconDB is set as the URL. Then restart the geoclue service with `sudo systemctl restart geoclue`
+
+```ini
+[wifi]
+enable=true
+url=https://beacondb.net/v1/geolocate
+```
+
+- Install Portainer for Docker management. You can access the Portainer UI at `https://localhost:9443` after running the following commands:
+
+```bash
+docker volume create portainer_data
+
+docker run -d \
+  -p 8000:8000 \
+  -p 9443:9443 \
+  --name portainer \
+  # starts the container automatically on system boot
+  --restart=always \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  -v portainer_data:/data \
+  portainer/portainer-ce:latest
+
 ```
 
 ## Help

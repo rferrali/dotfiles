@@ -17,7 +17,6 @@ packages:
         - atim/starship
         - aquacash5/nerd-fonts
         - alternateved/eza
-        - atim/lazydocker
         - yuezk/globalprotect-openconnect
       dnf_repofile_repos:
         - https://download.docker.com/linux/fedora/docker-ce.repo
@@ -50,7 +49,6 @@ packages:
       - victor-mono-nerd-fonts
       - fzf
       - zsh
-      - lazydocker
       - globalprotect-openconnect
       - celluloid
       - docker-ce
